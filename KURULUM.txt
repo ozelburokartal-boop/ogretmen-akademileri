@@ -1,0 +1,26 @@
+KARTAL İLÇE MEM - ÖĞRETMEN AKADEMİLERİ
+CLOUDFLARE PAGES KOLAY KURULUM DOSYALARI
+
+Klasör yapısı:
+public/
+  index.html
+functions/
+  api/
+    form-data.js
+    submit.js
+
+Cloudflare Pages ayarları:
+- Framework: None
+- Production branch: main
+- Build command: exit 0
+- Build output directory: public
+
+Cloudflare değişkenleri:
+APPS_SCRIPT_URL = Apps Script /exec adresiniz
+BACKEND_SECRET = Apps Script'te tanımladığınız gizli anahtar ile aynı değer
+
+Apps Script tarafında:
+- doPost(e) JSON isteklerini kabul etmeli
+- BACKEND_SECRET Script Properties içinde tanımlı olmalı
+- Web uygulaması "Ben" olarak çalışmalı
+- Erişim "Herkes" / giriş gerektirmeyen seçenek olmalı

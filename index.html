@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#991b1b">
+  <title>Kartal İlçe MEM - Öğretmen Akademileri Başvuru Formu</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      margin: 0;
+      background: #f4f6f8;
+      font-family: Arial, Helvetica, sans-serif;
+      color: #1f2937;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 25px auto;
+      padding: 0 15px 40px;
+    }
+
+    .header,
+    .panel {
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 14px rgba(0,0,0,0.06);
+    }
+
+    .header {
+      border-top: 6px solid #b91c1c;
+    }
+
+    .header h1 {
+      margin: 0 0 8px;
+      color: #991b1b;
+      font-size: 25px;
+      line-height: 1.25;
+    }
+
+    .header p {
+      margin: 0;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    .panel h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .field label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 7px;
+    }
+
+    .field input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 15px;
+      background: #fff;
+    }
+
+    .field input:focus {
+      outline: none;
+      border-color: #b91c1c;
+      box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.08);
+    }
+
+    .info {
+      background: #fff7ed;
+      border-left: 4px solid #f59e0b;
+      padding: 14px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .course-card {
+      display: block;
+      border: 2px solid #e5e7eb;
+      border-radius: 11px;
+      padding: 16px;
+      background: #ffffff;
+      cursor: pointer;
+      transition: border-color .18s ease, background-color .18s ease, opacity .18s ease;
+      user-select: none;
+    }
+
+    .course-card:hover {
+      border-color: #9ca3af;
+    }
+
+    .course-card.selected {
+      border-color: #15803d;
+      background: #f0fdf4;
+    }
+
+    .course-card.blocked,
+    .course-card.full {
+      opacity: 0.52;
+      background: #f3f4f6;
+      cursor: not-allowed;
+    }
+
+    .course-card.blocked:hover,
+    .course-card.full:hover {
+      border-color: #e5e7eb;
+    }
+
+    .course-line {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .course-checkbox {
+      width: 18px;
+      height: 18px;
+      margin-top: 3px;
+      flex: 0 0 auto;
+    }
+
+    .course-name {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #111827;
+    }
+
+    .detail {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #4b5563;
+    }
+
+    .day {
+      display: inline-block;
+      background: #eef2ff;
+      color: #3730a3;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 20px;
+      margin: 2px 3px 5px 0;
+    }
+
+    .capacity {
+      margin-top: 8px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #374151;
+    }
+
+    .capacity-full {
+      color: #b91c1c;
+      font-weight: 700;
+    }
+
+    .capacity-low {
+      color: #b45309;
+      font-weight: 700;
+    }
+
+    .blocked-text {
+      display: none;
+      margin-top: 8px;
+      color: #b91c1c;
+      font-size: 12px;
+      font-weight: bold;
+      line-height: 1.4;
+    }
+
+    .course-card.blocked .blocked-text,
+    .course-card.full .blocked-text {
+      display: block;
+    }
+
+    .selected-box {
+      display: none;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .selected-box h3 {
+      margin: 0 0 10px;
+      font-size: 17px;
+    }
+
+    .selected-box ul {
+      margin-bottom: 0;
+      padding-left: 22px;
+    }
+
+    .selected-box li {
+      margin-bottom: 8px;
+      line-height: 1.45;
+    }
+
+    .pending {
+      padding: 14px;
+      background: #f9fafb;
+      border: 1px dashed #d1d5db;
+      border-radius: 9px;
+      margin-top: 10px;
+    }
+
+    .pending-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .pending-warning {
+      margin-top: 5px;
+      color: #b45309;
+      font-size: 13px;
+    }
+
+    .submit-panel {
+      text-align: center;
+    }
+
+    button {
+      background: #b91c1c;
+      color: #ffffff;
+      border: 0;
+      border-radius: 9px;
+      padding: 14px 35px;
+      min-width: 210px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background .18s ease, opacity .18s ease;
+    }
+
+    button:hover {
+      background: #991b1b;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .message {
+      display: none;
+      margin-top: 18px;
+      border-radius: 8px;
+      padding: 14px;
+      line-height: 1.5;
+      text-align: left;
+      white-space: pre-line;
+    }
+
+    .message.success {
+      display: block;
+      background: #dcfce7;
+      border: 1px solid #86efac;
+      color: #166534;
+    }
+
+    .message.error {
+      display: block;
+      background: #fee2e2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 30px;
+      color: #6b7280;
+    }
+
+    .reload-link {
+      display: inline-block;
+      margin-top: 10px;
+      color: #991b1b;
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    @media (max-width: 700px) {
+      .form-grid,
+      .course-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        margin-top: 14px;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .header,
+      .panel {
+        padding: 18px;
+      }
+
+      .header h1 {
+        font-size: 21px;
+      }
+
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>KARTAL İLÇE MEM<br>ÖĞRETMEN AKADEMİLERİ</h1>
+    <p>2026-2027 Eğitim Öğretim Yılı Öğretmen Akademileri Başvuru Formu</p>
+  </div>
+
+  <form id="applicationForm">
+
+    <div class="panel">
+      <h2>Öğretmen Bilgileri</h2>
+
+      <div class="form-grid">
+        <div class="field">
+          <label for="name">Ad Soyad *</label>
+          <input id="name" type="text" maxlength="120" autocomplete="name" required>
+        </div>
+
+        <div class="field">
+          <label for="school">Görev Yaptığı Okul *</label>
+          <input id="school" type="text" maxlength="200" autocomplete="organization" required>
+        </div>
+
+        <div class="field">
+          <label for="phone">Telefon *</label>
+          <input id="phone" type="tel" maxlength="40" inputmode="tel" autocomplete="tel" required>
+        </div>
+
+        <div class="field">
+          <label for="email">E-posta</label>
+          <input id="email" type="email" maxlength="150" autocomplete="email">
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Kurs Seçimi</h2>
+
+      <div class="info">
+        Birden fazla kurs seçebilirsiniz. Ancak eğitim günü ve saatleri kesişen
+        kurslar birlikte seçilemez.
+        <br><br>
+        Bir kurs seçildiğinde onunla çakışan diğer kurslar otomatik olarak pasif hale gelir.
+        Kontenjanı dolan kurslar da seçime kapatılır.
+      </div>
+
+      <div id="loading" class="loading">Kurslar yükleniyor...</div>
+
+      <div id="courseGrid" class="course-grid"></div>
+
+      <div id="selectedBox" class="selected-box">
+        <h3>Seçtiğiniz Kurslar</h3>
+        <ul id="selectedList"></ul>
+      </div>
+    </div>
+
+    <div id="pendingPanel" class="panel" style="display:none;">
+      <h2>Bilgileri Tamamlanacak Kurslar</h2>
+      <p>
+        Aşağıdaki kurslar gün/saat bilgileri eksik olduğu için henüz başvuruya açık değildir.
+      </p>
+      <div id="pendingList"></div>
+    </div>
+
+    <div class="panel submit-panel">
+      <button id="submitButton" type="submit">Başvuruyu Gönder</button>
+      <div id="message" class="message"></div>
+    </div>
+
+  </form>
+</div>
+
+<script>
+var courses = [];
+var incompleteCourses = [];
+var selectedCourses = {};
+var isSubmitting = false;
+
+/************************************************
+ * BAŞLANGIÇ
+ ************************************************/
+window.addEventListener('load', function () {
+  loadCourses();
+});
+
+async function loadCourses() {
+  var loading = document.getElementById('loading');
+  var courseGrid = document.getElementById('courseGrid');
+
+  loading.style.display = 'block';
+  loading.innerHTML = 'Kurslar yükleniyor...';
+  courseGrid.innerHTML = '';
+
+  try {
+    var response = await fetch('/api/form-data?t=' + Date.now(), {
+      method: 'GET',
+      cache: 'no-store',
+      headers: {
+        'Accept': 'application/json'
+      }
+    });
+
+    var result = await safeReadJson(response);
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        (result && result.error) ||
+        'Kurs bilgileri alınamadı.'
+      );
+    }
+
+    var data = result.data || {};
+
+    courses = Array.isArray(data.courses) ? data.courses : [];
+    incompleteCourses = Array.isArray(data.incompleteCourses) ? data.incompleteCourses : [];
+
+    loading.style.display = 'none';
+
+    if (courses.length === 0) {
+      courseGrid.innerHTML =
+        '<div style="grid-column:1/-1;color:#6b7280;">Aktif kurs bulunamadı.</div>';
+    } else {
+      renderCourses();
+    }
+
+    renderIncompleteCourses();
+
+  } catch (error) {
+    loading.style.display = 'none';
+
+    courseGrid.innerHTML =
+      '<div style="grid-column:1/-1;color:#b91c1c;font-weight:bold;">' +
+      'Kurslar yüklenemedi.<br>' +
+      '<span class="reload-link" onclick="loadCourses()">Tekrar dene</span>' +
+      '</div>';
+
+    showMessage(getErrorMessage(error), 'error');
+  }
+}
+
+/************************************************
+ * KURSLARI OLUŞTUR
+ ************************************************/
+function renderCourses() {
+  var container = document.getElementById('courseGrid');
+  container.innerHTML = '';
+
+  for (var i = 0; i < courses.length; i++) {
+    var course = courses[i];
+
+    var card = document.createElement('label');
+    card.className = 'course-card';
+    card.setAttribute('data-course-id', course.id);
+
+    var dayHtml = '';
+
+    for (var d = 0; d < course.days.length; d++) {
+      dayHtml +=
+        '<span class="day">' +
+        escapeHtml(course.days[d]) +
+        '</span>';
+    }
+
+    var capacityHtml = '';
+
+    if (course.full) {
+      capacityHtml =
+        '<span class="capacity-full">KONTENJAN DOLU</span>';
+    } else if (
+      typeof course.capacity === 'number' &&
+      typeof course.remaining === 'number'
+    ) {
+      var capacityText =
+        'Kontenjan: ' +
+        course.capacity +
+        ' | Kalan: ' +
+        course.remaining;
+
+      if (course.remaining <= 3) {
+        capacityHtml =
+          '<span class="capacity-low">' +
+          escapeHtml(capacityText) +
+          '</span>';
+      } else {
+        capacityHtml = escapeHtml(capacityText);
+      }
+    }
+
+    card.innerHTML =
+      '<div class="course-line">' +
+        '<input ' +
+          'type="checkbox" ' +
+          'class="course-checkbox" ' +
+          'value="' + escapeHtml(course.id) + '"' +
+        '>' +
+
+        '<div>' +
+          '<div class="course-name">' +
+            escapeHtml(course.name) +
+          '</div>' +
+
+          '<div class="detail">' +
+            '<div>' + dayHtml + '</div>' +
+
+            '<div>' +
+              '<strong>Saat:</strong> ' +
+              escapeHtml(course.start) +
+              ' – ' +
+              escapeHtml(course.end) +
+            '</div>' +
+
+            '<div>' +
+              '<strong>Eğitmen:</strong> ' +
+              escapeHtml(course.instructor) +
+            '</div>' +
+
+            (
+              capacityHtml
+                ? '<div class="capacity">' + capacityHtml + '</div>'
+                : ''
+            ) +
+          '</div>' +
+
+          '<div class="blocked-text"></div>' +
+        '</div>' +
+      '</div>';
+
+    container.appendChild(card);
+
+    var checkbox = card.querySelector('.course-checkbox');
+
+    if (course.full) {
+      checkbox.disabled = true;
+      card.className = 'course-card full';
+
+      var fullText = card.querySelector('.blocked-text');
+      fullText.innerHTML = 'Kontenjan dolu';
+
+      continue;
+    }
+
+    attachCourseEvent(card, course.id);
+  }
+
+  updateAvailability();
+  updateSummary();
+}
+
+/************************************************
+ * CHECKBOX EVENT
+ ************************************************/
+function attachCourseEvent(card, courseId) {
+  var checkbox = card.querySelector('.course-checkbox');
+
+  checkbox.addEventListener('change', function () {
+    if (checkbox.checked) {
+      selectedCourses[courseId] = true;
+    } else {
+      delete selectedCourses[courseId];
+    }
+
+    updateAvailability();
+    updateSummary();
+  });
+}
+
+/************************************************
+ * ÇAKIŞAN / DOLU KURSLARI KAPAT
+ ************************************************/
+function updateAvailability() {
+  for (var i = 0; i < courses.length; i++) {
+    var course = courses[i];
+
+    var card = document.querySelector(
+      '[data-course-id="' + cssEscape(course.id) + '"]'
+    );
+
+    if (!card) {
+      continue;
+    }
+
+    var checkbox = card.querySelector('.course-checkbox');
+    var blockedText = card.querySelector('.blocked-text');
+
+    if (course.full) {
+      checkbox.checked = false;
+      checkbox.disabled = true;
+      card.className = 'course-card full';
+      blockedText.innerHTML = 'Kontenjan dolu';
+
+      delete selectedCourses[course.id];
+      continue;
+    }
+
+    if (selectedCourses[course.id]) {
+      checkbox.disabled = false;
+      checkbox.checked = true;
+      card.className = 'course-card selected';
+      blockedText.innerHTML = '';
+      continue;
+    }
+
+    var blockers = [];
+    var selectedId;
+
+    for (selectedId in selectedCourses) {
+      if (
+        Object.prototype.hasOwnProperty.call(selectedCourses, selectedId) &&
+        arrayContains(course.conflicts || [], selectedId)
+      ) {
+        blockers.push(selectedId);
+      }
+    }
+
+    if (blockers.length > 0) {
+      checkbox.checked = false;
+      checkbox.disabled = true;
+      card.className = 'course-card blocked';
+
+      var blockerNames = [];
+
+      for (var b = 0; b < blockers.length; b++) {
+        blockerNames.push(getCourseName(blockers[b]));
+      }
+
+      blockedText.innerHTML =
+        'Çakışma nedeniyle kapalı: ' +
+        escapeHtml(blockerNames.join(', '));
+
+    } else {
+      checkbox.checked = false;
+      checkbox.disabled = false;
+      card.className = 'course-card';
+      blockedText.innerHTML = '';
+    }
+  }
+}
+
+/************************************************
+ * SEÇİLENLER ÖZETİ
+ ************************************************/
+function updateSummary() {
+  var box = document.getElementById('selectedBox');
+  var list = document.getElementById('selectedList');
+
+  list.innerHTML = '';
+
+  var count = 0;
+  var id;
+
+  for (id in selectedCourses) {
+    if (!Object.prototype.hasOwnProperty.call(selectedCourses, id)) {
+      continue;
+    }
+
+    var course = getCourseById(id);
+
+    if (!course) {
+      continue;
+    }
+
+    count++;
+
+    var li = document.createElement('li');
+
+    li.innerHTML =
+      '<strong>' + escapeHtml(course.name) + '</strong> — ' +
+      escapeHtml(course.days.join(' / ')) + ' — ' +
+      escapeHtml(course.start) + '-' + escapeHtml(course.end);
+
+    list.appendChild(li);
+  }
+
+  box.style.display = count > 0 ? 'block' : 'none';
+}
+
+/************************************************
+ * EKSİK BİLGİLİ KURSLAR
+ ************************************************/
+function renderIncompleteCourses() {
+  var panel = document.getElementById('pendingPanel');
+  var list = document.getElementById('pendingList');
+
+  if (!incompleteCourses || incompleteCourses.length === 0) {
+    panel.style.display = 'none';
+    list.innerHTML = '';
+    return;
+  }
+
+  panel.style.display = 'block';
+  list.innerHTML = '';
+
+  for (var i = 0; i < incompleteCourses.length; i++) {
+    var course = incompleteCourses[i];
+
+    var div = document.createElement('div');
+    div.className = 'pending';
+
+    div.innerHTML =
+      '<div class="pending-title">' +
+        escapeHtml(course.name) +
+      '</div>' +
+
+      '<div>' +
+        'Eğitmen: ' +
+        escapeHtml(course.instructor || 'Belirtilmemiş') +
+      '</div>' +
+
+      '<div class="pending-warning">' +
+        'Eksik bilgiler: ' +
+        escapeHtml((course.missing || []).join(', ')) +
+      '</div>';
+
+    list.appendChild(div);
+  }
+}
+
+/************************************************
+ * FORM GÖNDER
+ ************************************************/
+document.getElementById('applicationForm').addEventListener('submit', async function (event) {
+  event.preventDefault();
+
+  if (isSubmitting) {
+    return;
+  }
+
+  hideMessage();
+
+  var selectedIds = [];
+  var id;
+
+  for (id in selectedCourses) {
+    if (Object.prototype.hasOwnProperty.call(selectedCourses, id)) {
+      selectedIds.push(id);
+    }
+  }
+
+  if (selectedIds.length === 0) {
+    showMessage('Lütfen en az bir kurs seçiniz.', 'error');
+    return;
+  }
+
+  var payload = {
+    name: trimValue(document.getElementById('name').value),
+    school: trimValue(document.getElementById('school').value),
+    phone: trimValue(document.getElementById('phone').value),
+    email: trimValue(document.getElementById('email').value),
+    selectedCourseIds: selectedIds
+  };
+
+  if (!payload.name || !payload.school || !payload.phone) {
+    showMessage('Ad Soyad, Görev Yaptığı Okul ve Telefon alanları zorunludur.', 'error');
+    return;
+  }
+
+  var button = document.getElementById('submitButton');
+
+  isSubmitting = true;
+  button.disabled = true;
+  button.textContent = 'Kaydediliyor...';
+
+  try {
+    var response = await fetch('/api/submit', {
+      method: 'POST',
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    var result = await safeReadJson(response);
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        (result && result.error) ||
+        'Başvuru kaydedilemedi.'
+      );
+    }
+
+    var data = result.data || {};
+
+    showMessage(
+      'Başvurunuz başarıyla kaydedildi.' +
+      (data.applicationId ? '\nBaşvuru No: ' + data.applicationId : ''),
+      'success'
+    );
+
+    document.getElementById('applicationForm').reset();
+    selectedCourses = {};
+    updateAvailability();
+    updateSummary();
+
+    /*
+     * Kontenjanlar değişmiş olabilir.
+     * Yeni sayıları hemen al.
+     */
+    await loadCourses();
+
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
+
+  } catch (error) {
+    showMessage(getErrorMessage(error), 'error');
+
+    /*
+     * Sunucu "kontenjan dolu" derse kartları da güncelle.
+     */
+    try {
+      await loadCourses();
+    } catch (ignore) {}
+
+  } finally {
+    isSubmitting = false;
+    button.disabled = false;
+    button.textContent = 'Başvuruyu Gönder';
+  }
+});
+
+/************************************************
+ * YARDIMCI FONKSİYONLAR
+ ************************************************/
+async function safeReadJson(response) {
+  var text = await response.text();
+
+  try {
+    return JSON.parse(text);
+  } catch (error) {
+    throw new Error(
+      'Sunucudan beklenmeyen bir yanıt geldi. ' +
+      'Lütfen sistem yöneticisine bildiriniz.'
+    );
+  }
+}
+
+function getCourseById(id) {
+  for (var i = 0; i < courses.length; i++) {
+    if (courses[i].id === id) {
+      return courses[i];
+    }
+  }
+
+  return null;
+}
+
+function getCourseName(id) {
+  var course = getCourseById(id);
+  return course ? course.name : id;
+}
+
+function arrayContains(array, value) {
+  for (var i = 0; i < array.length; i++) {
+    if (array[i] === value) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function trimValue(value) {
+  return String(value || '').replace(/^\s+|\s+$/g, '');
+}
+
+function escapeHtml(value) {
+  return String(
+    value === null || value === undefined ? '' : value
+  )
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#039;');
+}
+
+/*
+ * ID'leriniz basit ASCII olduğundan bu yeterlidir.
+ * CSS.escape olmayan eski tarayıcılarda da çalışır.
+ */
+function cssEscape(value) {
+  return String(value).replace(/"/g, '\\"');
+}
+
+function showMessage(text, type) {
+  var element = document.getElementById('message');
+
+  element.className = 'message ' + type;
+  element.textContent = text;
+}
+
+function hideMessage() {
+  var element = document.getElementById('message');
+
+  element.className = 'message';
+  element.textContent = '';
+}
+
+function getErrorMessage(error) {
+  if (!error) {
+    return 'Bilinmeyen bir hata oluştu.';
+  }
+
+  if (error.message) {
+    return error.message;
+  }
+
+  return String(error);
+}
+</script>
+
+</body>
+</html>
